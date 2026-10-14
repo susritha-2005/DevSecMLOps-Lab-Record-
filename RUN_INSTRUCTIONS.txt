@@ -1,0 +1,58 @@
+DevSecMLOps Lab - Experiments 3 and 6 (code exactly as in the lab manual)
+=========================================================================
+
+EXPERIMENT 3 - Build an End-to-End Automated Data Pipeline
+----------------------------------------------------------
+Open PowerShell inside the exp3 folder.
+
+1. Install the libraries:
+       python -m pip install pandas scikit-learn joblib
+
+2. Run:
+       python exp3_pipeline.py
+
+Expected output:
+       === Automated Data Pipeline Started ===
+       [EXTRACT ] loaded 150 rows x 5 cols
+       [VALIDATE] no missing values, target present -> OK
+       [TRANSFORM] standard-scaled 4 features
+       [TRAIN   ] model fitted, test accuracy = 0.933
+       [REPORT  ] per-class metrics:
+                     precision    recall  f1-score   support
+                  0       1.00      1.00      1.00        10
+                  1       0.90      0.90      0.90        10
+                  2       0.90      0.90      0.90        10
+           accuracy                           0.93        30
+          macro avg       0.93      0.93      0.93        30
+       weighted avg       0.93      0.93      0.93        30
+       [PERSIST ] saved model  -> artifacts\model.pkl
+       [PERSIST ] saved scaler -> artifacts\scaler.pkl
+       === Pipeline Completed Successfully ===
+
+An 'artifacts' folder with model.pkl and scaler.pkl is created.
+(On Windows the path prints with a backslash: artifacts\model.pkl)
+
+
+EXPERIMENT 6 - ML Pipeline with Access Control (RBAC)
+-----------------------------------------------------
+Open PowerShell inside the exp6 folder. No extra libraries needed.
+
+1. Run:
+       python exp6_rbac.py
+
+Expected output (times will differ):
+       === ML Pipeline Access Control ===
+       [AUTH OK ] admin           -> extract
+       [AUTH OK ] admin           -> train
+       [AUTH OK ] admin           -> deploy
+       [DENIED  ] Role 'data_scientist' is NOT authorized for 'deploy'
+       [DENIED  ] Role 'viewer' is NOT authorized for 'train'
+       [DENIED  ] Role 'ml_engineer' is NOT authorized for 'extract'
+
+       === Audit Log ===
+       hh:mm:ss  admin           extract    ALLOW
+       hh:mm:ss  admin           train      ALLOW
+       hh:mm:ss  admin           deploy     ALLOW
+       hh:mm:ss  data_scientist  deploy     DENY
+       hh:mm:ss  viewer          train      DENY
+       hh:mm:ss  ml_engineer     extract    DENY
